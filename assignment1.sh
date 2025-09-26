@@ -1,4 +1,5 @@
 #!/usr/bin/bash -l
+#SBATCH --partition teaching
 #SBATCH --time=24:0:0
 #SBATCH --ntasks=1
 #SBATCH --mem=16GB

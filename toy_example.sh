@@ -1,11 +1,11 @@
 #!/usr/bin/bash -l
+#SBATCH --partition teaching
 #SBATCH --time=0:15:0
 #SBATCH --ntasks=1
 #SBATCH --mem=8GB
 #SBATCH --cpus-per-task=1
 #SBATCH --gpus=1
 #SBATCH --output=toy_example.out
-
 
 # module load gpu
 module load mamba
