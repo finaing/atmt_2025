@@ -1,0 +1,26 @@
+
+tput: unknown terminal "xterm-16color"
+Filesystems usage for user fingim ( uid 646293074 ):
+-------------------------------------------------------------------------------------
+Directory                       Used   Limit   Used,%         Files     Limit
+-------------------------------------------------------------------------------------
+/home/fingim                   417MB    15GB     2.7%          4241    100000
+/data/fingim                    16GB   200GB     7.6%         40304          
+/scratch/fingim                   0B    20TB     0.0%             1          
+
+/shares/atomt.pilot.s3it.uzh   1.4GB    10TB     0.0%            54          
+-------------------------------------------------------------------------------------
+
+Files on /scratch may be purged after 30 days.
+See https://docs.s3it.uzh.ch/cluster/data
+
+[2025-10-27 09:58:22] COMMAND: translate.py --cuda --input cz-en/data/prepared/test.cz --src-tokenizer cz-en/tokenizers/cz-bpe-8000.model --tgt-tokenizer cz-en/tokenizers/en-bpe-8000.model --checkpoint-path cz-en/checkpoints/checkpoint_best.pt --output cz-en/output.txt --max-len 300
+[2025-10-27 09:58:22] Arguments: {'cuda': True, 'data': 'cz-en/data/prepared/', 'source_lang': 'cz', 'target_lang': 'en', 'src_tokenizer': 'cz-en/tokenizers/cz-bpe-8000.model', 'tgt_tokenizer': 'cz-en/tokenizers/en-bpe-8000.model', 'max_tokens': None, 'batch_size': 1, 'train_on_tiny': False, 'arch': 'transformer', 'max_epoch': 7, 'clip_norm': 4.0, 'lr': 0.0003, 'patience': 3, 'max_length': 300, 'log_file': 'cz-en/logs/train.log', 'save_dir': 'cz-en/checkpoints/', 'restore_file': 'checkpoint_last.pt', 'save_interval': 1, 'no_save': False, 'epoch_checkpoints': False, 'ignore_checkpoints': True, 'encoder_dropout': 0.1, 'decoder_dropout': 0.1, 'dim_embedding': 256, 'attention_heads': 4, 'dim_feedforward_encoder': 1024, 'dim_feedforward_decoder': 1024, 'max_seq_len': 300, 'n_encoder_layers': 3, 'n_decoder_layers': 3, 'encoder_embed_path': None, 'decoder_embed_path': None, 'seed': 42, 'input': 'cz-en/data/prepared/test.cz', 'checkpoint_path': 'cz-en/checkpoints/checkpoint_best.pt', 'output': 'cz-en/output.txt', 'max_len': 300, 'bleu': False, 'reference': None}
+Traceback (most recent call last):
+  File "/data/fingim/atmt_2025/translate.py", line 186, in <module>
+    main(args)
+  File "/data/fingim/atmt_2025/translate.py", line 68, in main
+    src_lines = [line.strip() for line in f if line.strip()]
+                                          ^
+  File "<frozen codecs>", line 322, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 0: invalid start byte
