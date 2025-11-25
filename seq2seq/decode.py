@@ -56,6 +56,7 @@ def beam_search_decode(model: Seq2SeqModel, src_tokens: torch.Tensor, src_pad_ma
     for _ in range(max_out_len):
         new_beams = []
         for seq, score in beams:
+            seq = seq.view(1, -1)
             if seq[0, -1].item() == EOS:
                 new_beams.append((seq, score))
                 continue

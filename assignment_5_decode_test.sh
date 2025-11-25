@@ -5,7 +5,7 @@
 #SBATCH --mem=16GB
 #SBATCH --cpus-per-task=1
 #SBATCH --gpus=1
-#SBATCH --output=out_ass5_decode_test.out
+#SBATCH --output=out_a5_decode_test.out
 
 module load gpu
 module load mamba
@@ -18,7 +18,7 @@ for beam in 1 3 5; do
 
     python translate.py \
         --cuda \
-        --input ./cz-en/data/decode_test_raw \
+        --input ./cz-en/data/decode_test_raw/decode_test.cz \
         --src-tokenizer cz-en/tokenizers/cz-bpe-8000.model \
         --tgt-tokenizer cz-en/tokenizers/en-bpe-8000.model \
         --checkpoint-path cz-en/checkpoints/checkpoint_best.pt \
@@ -26,3 +26,4 @@ for beam in 1 3 5; do
         --max-len 300 \
         --beam-size $beam
 done
+
