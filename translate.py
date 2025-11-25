@@ -55,6 +55,7 @@ def get_args():
                         help='length normalization hyperparameter for beam search')
     parser.add_argument('--stopping-criterion', type=str,
                         choices=['relative_threshold_pruning', 'absolute_threshold_pruning'])
+    parser.add_argument('--threshold', default=0.0, type=float)
     # BLEU computation arguments
     parser.add_argument('--bleu', action='store_true',
                         help='If set, compute BLEU score after translation')
