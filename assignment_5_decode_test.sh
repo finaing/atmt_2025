@@ -1,0 +1,28 @@
+#!/usr/bin/bash -l
+#SBATCH --partition teaching
+#SBATCH --time=24:0:0
+#SBATCH --ntasks=1
+#SBATCH --mem=16GB
+#SBATCH --cpus-per-task=1
+#SBATCH --gpus=1
+#SBATCH --output=out_ass5_decode_test.out
+
+module load gpu
+module load mamba
+source activate atmt
+export XLA_FLAGS=--xla_gpu_cuda_data_dir=$CONDA_PREFIX/pkgs/cuda-toolkit
+
+# TRANSLATE with beam sizes 1, 3, and 5
+for beam in 1 3 5; do
+    echo "Running translation with beam size = $beam"
+
+    python translate.py \
+        --cuda \
+        --input ./cz-en/data/decode_test_raw \
+        --src-tokenizer cz-en/tokenizers/cz-bpe-8000.model \
+        --tgt-tokenizer cz-en/tokenizers/en-bpe-8000.model \
+        --checkpoint-path cz-en/checkpoints/checkpoint_best.pt \
+        --output cz-en/output_beam${beam}.txt \
+        --max-len 300 \
+        --beam-size $beam
+done
