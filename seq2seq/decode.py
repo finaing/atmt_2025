@@ -65,7 +65,7 @@ def beam_search_decode(model: Seq2SeqModel, src_tokens: torch.Tensor, src_pad_ma
         for seq, score in beams:
 
             if stopping_criterion == 'relative_threshold_pruning':
-                if score <= threshold * best_score:
+                if score < threshold * best_score:  # Changed <= to
                     continue
 
             elif stopping_criterion == 'absolute_threshold_pruning':
