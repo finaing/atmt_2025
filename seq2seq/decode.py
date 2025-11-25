@@ -98,11 +98,11 @@ def beam_search_decode(model: Seq2SeqModel, src_tokens: torch.Tensor, src_pad_ma
                 new_score = score + topk_log_probs[:, k].item()
                 new_beams.append((new_seq, new_score))
 
-        # beams = sorted(new_beams, key=lambda x: x[1], reverse=True)[:beam_size]
-        def length_norm(score, seq_len):
-            return score / (((5 + seq_len) / 6) ** alpha)
-        beams = sorted(new_beams, key=lambda x: length_norm(x[1], x[0].size(1)),
-                       reverse=True)[:beam_size]
+        beams = sorted(new_beams, key=lambda x: x[1], reverse=True)[:beam_size]
+        # def length_norm(score, seq_len):
+        #     return score / (((5 + seq_len) / 6) ** alpha)
+        # beams = sorted(new_beams, key=lambda x: length_norm(x[1], x[0].size(1)),
+        #                reverse=True)[:beam_size]
         # __QUESTION 5: Why do we check for EOS here and what does it imply for beam search?
         if all(seq[0, -1].item() == EOS for seq, _ in beams):
             break

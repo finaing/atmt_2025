@@ -14,7 +14,7 @@ export XLA_FLAGS=--xla_gpu_cuda_data_dir=$CONDA_PREFIX/pkgs/cuda-toolkit
 
 # Define arrays for stopping criteria and corresponding thresholds
 stop_criteria=(relative_threshold_pruning absolute_threshold_pruning)
-thresholds=(0.3 2.5) 
+thresholds=(0.6 2.5) 
 
 # Loop over indices
 for i in "${!stop_criteria[@]}"; do
