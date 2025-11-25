@@ -13,6 +13,7 @@ def decode(model: Seq2SeqModel, src_tokens: torch.Tensor, src_pad_mask: torch.Te
     generated = torch.full((batch_size, 1), BOS,
                            dtype=torch.long, device=device)
     finished = torch.zeros(batch_size, dtype=torch.bool, device=device)
+    encoder_out = model.encoder(src_tokens, src_pad_mask)
     for t in range(max_out_len):
         # Create target padding mask with correct batch dimension
         max_len = model.decoder.pos_embed.size(1)
@@ -22,8 +23,14 @@ def decode(model: Seq2SeqModel, src_tokens: torch.Tensor, src_pad_mask: torch.Te
         trg_pad_mask = (generated == PAD).unsqueeze(
             1).unsqueeze(2)  # (batch_size, 1, 1, seq_len)
         # Forward pass: use only the generated tokens so far
-        output = model(src_tokens, src_pad_mask,
-                       generated, trg_pad_mask).to(device)
+        output = model.decoder(
+            encoder_out,
+            src_pad_mask,
+            generated,
+            trg_pad_mask
+        ).to(device)
+        # output = model(src_tokens, src_pad_mask,
+        #               generated, trg_pad_mask).to(device)
         # Get the logits for the last time step
         next_token_logits = output[:, -1, :]  # last time step
         next_tokens = next_token_logits.argmax(dim=-1, keepdim=True)  # greedy
@@ -56,7 +63,6 @@ def beam_search_decode(model: Seq2SeqModel, src_tokens: torch.Tensor, src_pad_ma
     for _ in range(max_out_len):
         new_beams = []
         for seq, score in beams:
-            seq = seq.view(1, -1)
             if seq[0, -1].item() == EOS:
                 new_beams.append((seq, score))
                 continue
@@ -82,7 +88,11 @@ def beam_search_decode(model: Seq2SeqModel, src_tokens: torch.Tensor, src_pad_ma
                 new_score = score + topk_log_probs[:, k].item()
                 new_beams.append((new_seq, new_score))
 
-        beams = sorted(new_beams, key=lambda x: x[1], reverse=True)[:beam_size]
+        # beams = sorted(new_beams, key=lambda x: x[1], reverse=True)[:beam_size]
+        def length_norm(score, seq_len):
+            return score / (((5 + seq_len) / 6) ** alpha)
+        beams = sorted(new_beams, key=lambda x: length_norm(x[1], x[0].size(1)),
+                       reverse=True)[:beam_size]
         # __QUESTION 5: Why do we check for EOS here and what does it imply for beam search?
         if all(seq[0, -1].item() == EOS for seq, _ in beams):
             break
