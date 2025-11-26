@@ -1,4 +1,5 @@
 import torch
+import math
 import sentencepiece as spm
 from seq2seq.models import Seq2SeqModel
 
@@ -65,7 +66,7 @@ def beam_search_decode(model: Seq2SeqModel, src_tokens: torch.Tensor, src_pad_ma
         for seq, score in beams:
 
             if stopping_criterion == 'relative_threshold_pruning':
-                if score <= best_score + torch.log(threshold):
+                if score <= best_score + math.log(threshold):
                     continue
 
             elif stopping_criterion == 'absolute_threshold_pruning':

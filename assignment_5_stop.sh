@@ -31,7 +31,7 @@ for i in "${!stop_criteria[@]}"; do
         --checkpoint-path cz-en/checkpoints/checkpoint_best.pt \
         --output cz-en/output_len_norm.txt \
         --max-len 300 \
-        --beam-size 3 \
+        --beam-size 5 \
         --stopping-criterion "$stop_crit" \
         --threshold "$thresh"
 done
