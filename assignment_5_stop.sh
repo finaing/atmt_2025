@@ -29,7 +29,7 @@ for i in "${!stop_criteria[@]}"; do
         --src-tokenizer cz-en/tokenizers/cz-bpe-8000.model \
         --tgt-tokenizer cz-en/tokenizers/en-bpe-8000.model \
         --checkpoint-path cz-en/checkpoints/checkpoint_best.pt \
-        --output cz-en/output_len_norm.txt \
+        --output cz-en/output_$stop_crit.txt \
         --max-len 300 \
         --beam-size 5 \
         --stopping-criterion "$stop_crit" \
